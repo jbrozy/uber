@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller
-@RequestMapping(path="/client")
+@RequestMapping(path="/ride")
 public class RideController {
   private final RideService _rideService;
 

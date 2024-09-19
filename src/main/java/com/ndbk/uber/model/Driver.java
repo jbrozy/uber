@@ -7,6 +7,7 @@ import java.util.Set;
 @Entity(name = "driver")
 public class Driver {
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
   @Column(length = 50, nullable = false)
