@@ -1,11 +1,13 @@
 package com.ndbk.uber.service;
 
 import com.ndbk.uber.dto.CreateRideRequest;
+import com.ndbk.uber.dto.RideStatistic;
 import com.ndbk.uber.helper.CoordinateHelper;
 import com.ndbk.uber.model.Ride;
 import com.ndbk.uber.model.Waypoint;
 import com.ndbk.uber.repository.RideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,5 +33,10 @@ public class RideService {
     newRide.addWaypoint(to);
 
     return newRide;
+  }
+
+  @Query(value = "SELECT id FROM Client")
+  public RideStatistic getRideStatistic(){
+    return new RideStatistic();
   }
 }
