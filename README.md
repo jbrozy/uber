@@ -140,6 +140,11 @@ Server gibt 404 zurück.
         "city": "Chicago, United States",
         "licensePlate": "UN-CH 1"
     },
+    "client": {
+        "id" : 1,
+        "name" : "Tobias Poth",
+        "gender" : "m"
+    },
     "waypoints": [
         {
             "id": 6166943,
