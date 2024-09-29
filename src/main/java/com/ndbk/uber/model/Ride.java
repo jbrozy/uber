@@ -85,6 +85,7 @@ public class Ride {
   }
 
   public void addWaypoint(Waypoint waypoint) {
+    waypoint.setRide(this);
     this.waypoints.add(waypoint);
   }
 

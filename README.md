@@ -146,14 +146,12 @@ Server gibt 404 zurück.
             "number": 2,
             "latitude": 42.31870896,
             "longitude": -71.08484698,
-            "rideId": 0
         },
         {
             "id": 6166944,
             "number": 1,
             "latitude": 36.1708966,
             "longitude": -86.78516411,
-            "rideId": 0
         }
     ]
 }
