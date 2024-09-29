@@ -1,6 +1,7 @@
 package com.ndbk.uber.service;
 
 import com.ndbk.uber.dto.CreateRideRequest;
+import com.ndbk.uber.dto.RideStatistic;
 import com.ndbk.uber.helper.CoordinateHelper;
 import com.ndbk.uber.model.Client;
 import com.ndbk.uber.model.Driver;
@@ -9,10 +10,13 @@ import com.ndbk.uber.model.Waypoint;
 import com.ndbk.uber.repository.ClientRepository;
 import com.ndbk.uber.repository.DriverRepository;
 import com.ndbk.uber.repository.RideRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class RideService {
@@ -67,5 +71,9 @@ public class RideService {
 
   public Optional<Ride> getRide(int rideId){
     return _rideRepository.findById(rideId);
+  }
+
+  public List<RideStatistic> getRideStatistics(){
+    return _rideRepository.getRideStatistic();
   }
 }
