@@ -161,3 +161,25 @@ Server gibt 404 zurück.
     ]
 }
 ```
+### Statistic Query
+#### Request auf
+```
+	{{base_url}}/stats
+```
+```
+
+#### Response
+```json
+[
+    {
+        "city": "Nashville, United States",
+        "anzahl": 9678,
+        "umsatz": 1678556.0,
+        "avgLat": 36.1708966,
+        "avgLong": -86.78516411
+    },
+    ... (NOCH MEHR)
+]
+```
+```
+```
