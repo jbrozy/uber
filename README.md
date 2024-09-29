@@ -160,12 +160,12 @@ Server gibt 404 zurück.
         }
     ]
 }
+
 ```
 ### Statistic Query
 #### Request auf
 ```
 	{{base_url}}/stats
-```
 ```
 
 #### Response
@@ -180,6 +180,4 @@ Server gibt 404 zurück.
     },
     ... (NOCH MEHR)
 ]
-```
-```
 ```
