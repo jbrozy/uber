@@ -4,10 +4,17 @@ import com.ndbk.uber.dto.CreateDriverRequest;
 import com.ndbk.uber.dto.UpdateDriverRequest;
 import com.ndbk.uber.model.Driver;
 import com.ndbk.uber.service.DriverService;
+import org.apache.coyote.Response;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -20,6 +27,22 @@ public class DriverController {
   }
 
 
+  @GetMapping("/drivers")
+  public ResponseEntity<Map<String, Object>> getDrivers(
+          @RequestParam(required = false) String name,
+          @RequestParam(required = false) String licensePlate,
+          @RequestParam(defaultValue = "0", required = false) int page,
+          @RequestParam(defaultValue = "3", required = false) int size) {
+    Pageable pageable = PageRequest.of(page, size);
+    var drivers = _driverService.getDrivers(name, licensePlate, pageable);
+    Map<String, Object> response = new HashMap<>();
+    response.put("drivers", drivers.getContent());
+    response.put("currentPage", drivers.getNumber());
+    response.put("totalItems", drivers.getTotalElements());
+    response.put("totalPages", drivers.getTotalPages());
+
+    return ResponseEntity.ok(response);
+  }
   @PostMapping
   public ResponseEntity<Driver> CreateDriver(@RequestBody CreateDriverRequest createDriverRequest){
     Driver newDriver = _driverService.create(createDriverRequest);

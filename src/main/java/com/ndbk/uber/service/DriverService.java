@@ -4,6 +4,8 @@ import com.ndbk.uber.dto.CreateDriverRequest;
 import com.ndbk.uber.dto.UpdateDriverRequest;
 import com.ndbk.uber.model.Driver;
 import com.ndbk.uber.repository.DriverRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -43,5 +45,19 @@ public class DriverService {
 
   public void deleteDriverById(int id){
     _driverRepository.deleteById(id);
+  }
+
+  public Page<Driver> getDrivers(String name, String licensePlate, Pageable pageable) {
+    if(name == null && licensePlate == null){
+      return _driverRepository.findAll(pageable);
+    }
+
+    if(licensePlate == null)
+      return _driverRepository.findByNameContains(name, pageable);
+
+    if(name == null)
+      return _driverRepository.findByLicensePlateContains(licensePlate, pageable);
+
+    return _driverRepository.findByLicensePlateContainsAndNameContains(licensePlate, name, pageable);
   }
 }
