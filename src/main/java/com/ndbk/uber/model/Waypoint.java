@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Entity(name = "waypoint")
 public class Waypoint {
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
   @Column(length = 50, nullable = false)

@@ -1,34 +1,51 @@
 package com.ndbk.uber.service;
 
 import com.ndbk.uber.dto.CreateRideRequest;
-import com.ndbk.uber.dto.RideStatistic;
 import com.ndbk.uber.helper.CoordinateHelper;
+import com.ndbk.uber.model.Client;
+import com.ndbk.uber.model.Driver;
 import com.ndbk.uber.model.Ride;
 import com.ndbk.uber.model.Waypoint;
+import com.ndbk.uber.repository.ClientRepository;
+import com.ndbk.uber.repository.DriverRepository;
 import com.ndbk.uber.repository.RideRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Optional;
 
 @Service
 public class RideService {
   final RideRepository _rideRepository;
+  private final ClientRepository _clientRepository;
+  private final DriverRepository _driverRepository;
 
-  public RideService(RideRepository rideRepository) {
-    _rideRepository = rideRepository;
+  public RideService(RideRepository rideRepository, ClientRepository clientRepository, DriverRepository driverRepository) {
+    this._rideRepository = rideRepository;
+    this._clientRepository = clientRepository;
+    this._driverRepository = driverRepository;
   }
 
   public Ride createRide(CreateRideRequest createRideRequest){
+    Optional<Client> client = _clientRepository.findById(createRideRequest.clientId);
+    if(client.isEmpty()){
+      return null;
+    }
+
+    Optional<Driver> driver = _driverRepository.findById(createRideRequest.driverId);
+    if(driver.isEmpty()){
+      return null;
+    }
+
     Ride newRide = new Ride();
+    newRide.setClient(client.get());
+    newRide.setDriver(driver.get());
     newRide.setRideDate(createRideRequest.rideDate);
 
     ArrayList<Waypoint> waypoints = new ArrayList<>();
     for(int waypoint_idx = 0; waypoint_idx < createRideRequest.waypoints.size(); ++waypoint_idx){
       Waypoint waypoint = createRideRequest.waypoints.get(waypoint_idx).convert();
+      waypoint.setNumber(waypoint_idx + 1);
       waypoints.add(waypoint);
       newRide.addWaypoint(waypoint);
     }
@@ -45,7 +62,7 @@ public class RideService {
 
     newRide.setDistance((int)(distance));
 
-    return newRide;
+    return _rideRepository.save(newRide);
   }
 
   public Optional<Ride> getRide(int rideId){

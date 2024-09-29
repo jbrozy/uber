@@ -32,8 +32,8 @@ public class Ride {
   @JoinColumn(name = "driver_id", nullable = false)
   private Driver driver;
 
-  @OneToMany
-  @JoinColumn(insertable = false, updatable = false, name = "ride_id")
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(insertable = true, updatable = false, name = "ride_id")
   private Set<Waypoint> waypoints = new HashSet<>();
 
   public Client getClient() {
