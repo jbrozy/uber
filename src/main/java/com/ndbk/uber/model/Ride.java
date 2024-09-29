@@ -1,12 +1,11 @@
 package com.ndbk.uber.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity(name = "ride")
 public class Ride {
@@ -24,19 +23,34 @@ public class Ride {
   @Column(nullable = false)
   private int price;
 
-  @OneToMany
-  @JoinTable(name = "client")
-  @JoinColumn(name = "client_id", referencedColumnName = "id")
-  private Set<Client> clients = new HashSet<>();
+  @ManyToOne
+  @JoinColumn(name = "client_id", nullable = false) // Foreign key in Ride table
+  @JsonIgnore
+  private Client client;
 
-  @OneToOne
-  @JoinTable(name = "driver")
-  @JoinColumn(name = "driver_id", referencedColumnName = "id")
+  @ManyToOne
+  @JoinColumn(name = "driver_id", nullable = false)
   private Driver driver;
 
-  @ManyToMany
-  @Size(min = 2, max = 2)
+  @OneToMany
+  @JoinColumn(insertable = false, updatable = false, name = "ride_id")
   private Set<Waypoint> waypoints = new HashSet<>();
+
+  public Client getClient() {
+    return client;
+  }
+
+  public void setClient(Client client) {
+    this.client = client;
+  }
+
+  public Driver getDriver() {
+    return driver;
+  }
+
+  public void setDriver(Driver driver) {
+    this.driver = driver;
+  }
 
   public void setId(Integer id) {
     this.id = id;
@@ -70,7 +84,11 @@ public class Ride {
     this.price = price;
   }
 
-  public void addWaypoint(Waypoint waypoint){
+  public void addWaypoint(Waypoint waypoint) {
     this.waypoints.add(waypoint);
+  }
+
+  public Set<Waypoint> getWaypoints() {
+    return waypoints;
   }
 }

@@ -19,11 +19,6 @@ public class Waypoint {
   @Column(name = "ride_id")
   private int rideId;
 
-  @OneToOne()
-  @JoinTable(name = "ride")
-  @JoinColumn(name = "ride_id", referencedColumnName = "id")
-  private Ride ride;
-
   public void setId(Integer id) {
     this.id = id;
   }
@@ -55,4 +50,12 @@ public class Waypoint {
   public void setLongitude(double longitude) {
     this.longitude = longitude;
   }
+
+    public int getRideId() {
+        return rideId;
+    }
+
+    public void setRideId(int rideId) {
+        this.rideId = rideId;
+    }
 }

@@ -19,8 +19,6 @@ public class Driver {
   @Column(name = "license_plate", nullable = false)
   private String licensePlate;
 
-  @ManyToMany
-  private Set<Ride> rides;
 
   public void setId(Integer id) {
     this.id = id;

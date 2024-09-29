@@ -10,9 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Optional;
+
 @Service
 public class RideService {
-
   final RideRepository _rideRepository;
 
   public RideService(RideRepository rideRepository) {
@@ -23,20 +26,29 @@ public class RideService {
     Ride newRide = new Ride();
     newRide.setRideDate(createRideRequest.rideDate);
 
-    Waypoint from = createRideRequest.waypoints.get(0).convert();
-    Waypoint to = createRideRequest.waypoints.get(1).convert();
+    ArrayList<Waypoint> waypoints = new ArrayList<>();
+    for(int waypoint_idx = 0; waypoint_idx < createRideRequest.waypoints.size(); ++waypoint_idx){
+      Waypoint waypoint = createRideRequest.waypoints.get(waypoint_idx).convert();
+      waypoints.add(waypoint);
+      newRide.addWaypoint(waypoint);
+    }
 
-    int distance = CoordinateHelper.distance(from, to);
-    newRide.setDistance(distance);
+    double distance = 0;
+    for (int i = 0; i < newRide.getWaypoints().size() - 1; i++) {
+      double lat1 = waypoints.get(i).getLatitude();
+      double lon1 = waypoints.get(i).getLongitude();
+      double lat2 = waypoints.get(i + 1).getLatitude();
+      double lon2 = waypoints.get(i + 1).getLongitude();
 
-    newRide.addWaypoint(from);
-    newRide.addWaypoint(to);
+      distance += CoordinateHelper.haversine(lat1, lon1, lat2, lon2);
+    }
+
+    newRide.setDistance((int)(distance));
 
     return newRide;
   }
 
-  @Query(value = "SELECT id FROM Client")
-  public RideStatistic getRideStatistic(){
-    return new RideStatistic();
+  public Optional<Ride> getRide(int rideId){
+    return _rideRepository.findById(rideId);
   }
 }

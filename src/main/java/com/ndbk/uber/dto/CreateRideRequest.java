@@ -9,6 +9,7 @@ public class CreateRideRequest {
   public int clientId;
   public int driverId;
   public Date rideDate;
+
   @Size(min = 2)
   public List<CreateWaypointRequest> waypoints;
 }

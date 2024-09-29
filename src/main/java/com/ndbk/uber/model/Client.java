@@ -1,8 +1,11 @@
 package com.ndbk.uber.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity()
 public class Client {
@@ -16,8 +19,7 @@ public class Client {
   @Column(name = "gender", nullable = false)
   private String gender;
 
-  @ManyToMany(targetEntity = Ride.class, cascade = CascadeType.PERSIST)
-  @JoinTable(name = "ride")
+  @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<Ride> rides;
 
   public void setId(Integer id) {
@@ -43,4 +45,12 @@ public class Client {
   public void setName(String name) {
     this.name = name;
   }
+
+    public List<Ride> getRides() {
+        return rides;
+    }
+
+    public void setRides(List<Ride> rides) {
+        this.rides = rides;
+    }
 }

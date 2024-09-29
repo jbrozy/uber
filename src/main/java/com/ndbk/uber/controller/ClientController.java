@@ -22,11 +22,15 @@ public class ClientController {
   @GetMapping("{clientId}")
   public ResponseEntity<Client> GetClientById(@PathVariable int clientId){
     Optional<Client> client = _clientService.getClient(clientId);
+    if(client.isPresent()){
+      var c = client.get();
+      var rides = c.getRides();
+    }
     return ResponseEntity.of(client);
   }
 
   @DeleteMapping("{clientId}")
-  public ResponseEntity deleteClient(@PathVariable int clientId){
+  public ResponseEntity<Boolean> deleteClient(@PathVariable int clientId){
     _clientService.deleteClient(clientId);
     return ResponseEntity.ok().build();
   }
