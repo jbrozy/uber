@@ -6,7 +6,7 @@ Für diese Teilaufgabe haben wir ein Backend in Java (Spring Boot) und Python (F
 | Caspar | Python  | SQLAlchemy  |
 ### Hinzufügen eines Fahrers
 
-#### Create Driver HTTP Post
+#### Create Driver HTTP Post 125ms
 
 ```json
 {
@@ -29,7 +29,7 @@ Für diese Teilaufgabe haben wir ein Backend in Java (Spring Boot) und Python (F
 
 #### Ändern eines Fahrers
 
-#### Update Driver HTTP Put
+#### Update Driver HTTP Put 57ms
 
 ```json
 {
@@ -53,7 +53,7 @@ Für diese Teilaufgabe haben wir ein Backend in Java (Spring Boot) und Python (F
 
 ### Löschen eines Fahrers
 
-#### Delete Driver HTTP Delete
+#### Delete Driver HTTP Delete 28ms
 
 ```
 	{{base_url}}/driver/10001
@@ -69,9 +69,9 @@ Server gibt 404 zurück.
 
 ### Ausgabe einer Fahrt inkl. Kunde, Fahrer und Wegpunkten (vgl. Wireframe)
 
-#### HTTP Get auf 
+#### HTTP Get auf
 ```
-	{{base_url}}/ride/1
+	{{base_url}}/ride/1  : 67ms
 ```
 
 ```json
@@ -107,7 +107,7 @@ Server gibt 404 zurück.
 
 ### Hinzufügen einer Fahrt mit Client, Driver und Waypoints
 
-#### HTTP Post Request
+#### HTTP Post Request : 140ms
 
 ```json
 {

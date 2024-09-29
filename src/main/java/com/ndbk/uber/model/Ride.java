@@ -25,6 +25,7 @@ public class Ride {
 
   @ManyToOne
   @JoinColumn(name = "client_id", nullable = false) // Foreign key in Ride table
+  @JsonIgnore
   private Client client;
 
   @ManyToOne
