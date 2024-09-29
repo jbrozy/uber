@@ -1,6 +1,7 @@
 package com.ndbk.uber.controller;
 
 import com.ndbk.uber.dto.CreateDriverRequest;
+import com.ndbk.uber.dto.UpdateDriverRequest;
 import com.ndbk.uber.model.Driver;
 import com.ndbk.uber.service.DriverService;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +27,21 @@ public class DriverController {
     return ResponseEntity.ok().body(newDriver);
   }
 
+  @PutMapping
+  public ResponseEntity<Driver> UpdateDriver(@RequestBody UpdateDriverRequest driver){
+    Driver updateDriver = _driverService.updateDriver(driver);
+    return updateDriver != null ? ResponseEntity.ok().body(updateDriver) : ResponseEntity.notFound().build();
+  }
+
   @GetMapping("{driverId}")
   public ResponseEntity<Driver> GetDriverById(@PathVariable  int driverId){
     Optional<Driver> driver = _driverService.getDriverById(driverId);
     return driver.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @DeleteMapping("{driverId}")
+  public ResponseEntity<Driver> DeleteDriverById(@PathVariable  int driverId){
+    _driverService.deleteDriverById(driverId);
+    return ResponseEntity.ok().build();
   }
 }
