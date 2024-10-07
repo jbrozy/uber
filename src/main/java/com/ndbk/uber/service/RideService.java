@@ -1,6 +1,7 @@
 package com.ndbk.uber.service;
 
 import com.ndbk.uber.dto.CreateRideRequest;
+import com.ndbk.uber.dto.CreateWaypointRequest;
 import com.ndbk.uber.dto.RideStatistic;
 import com.ndbk.uber.helper.CoordinateHelper;
 import com.ndbk.uber.model.Client;
@@ -10,8 +11,9 @@ import com.ndbk.uber.model.Waypoint;
 import com.ndbk.uber.repository.ClientRepository;
 import com.ndbk.uber.repository.DriverRepository;
 import com.ndbk.uber.repository.RideRepository;
-import org.springframework.data.jpa.repository.Query;
+import com.ndbk.uber.repository.WaypointRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +25,19 @@ public class RideService {
   final RideRepository _rideRepository;
   private final ClientRepository _clientRepository;
   private final DriverRepository _driverRepository;
+  private final WaypointRepository _waypointRepository;
 
-  public RideService(RideRepository rideRepository, ClientRepository clientRepository, DriverRepository driverRepository) {
+  public RideService(RideRepository rideRepository,
+                     ClientRepository clientRepository,
+                     DriverRepository driverRepository, WaypointRepository waypointRepository)
+  {
     this._rideRepository = rideRepository;
     this._clientRepository = clientRepository;
     this._driverRepository = driverRepository;
+    this._waypointRepository = waypointRepository;
   }
 
+  @Transactional()
   public Ride createRide(CreateRideRequest createRideRequest){
     Optional<Client> client = _clientRepository.findById(createRideRequest.clientId);
     if(client.isEmpty()){
@@ -46,27 +54,37 @@ public class RideService {
     newRide.setDriver(driver.get());
     newRide.setRideDate(createRideRequest.rideDate);
 
-    ArrayList<Waypoint> waypoints = new ArrayList<>();
-    for(int waypoint_idx = 0; waypoint_idx < createRideRequest.waypoints.size(); ++waypoint_idx){
-      Waypoint waypoint = createRideRequest.waypoints.get(waypoint_idx).convert();
-      waypoint.setNumber(waypoint_idx + 1);
-      waypoints.add(waypoint);
-      newRide.addWaypoint(waypoint);
-    }
 
     double distance = 0;
-    for (int i = 0; i < newRide.getWaypoints().size() - 1; i++) {
-      double lat1 = waypoints.get(i).getLatitude();
-      double lon1 = waypoints.get(i).getLongitude();
-      double lat2 = waypoints.get(i + 1).getLatitude();
-      double lon2 = waypoints.get(i + 1).getLongitude();
+    var waypoints = createRideRequest.waypoints;
+    var newWaypoints = new ArrayList<Waypoint>();
+    for (int i = 0; i < waypoints.size() - 1; i++) {
+      double lat1 = waypoints.get(i).latitude;
+      double lon1 = waypoints.get(i).longitude;
+      double lat2 = waypoints.get(i + 1).latitude;
+      double lon2 = waypoints.get(i + 1).longitude;
 
       distance += CoordinateHelper.haversine(lat1, lon1, lat2, lon2);
     }
 
-    newRide.setDistance((int)(distance));
+    newRide.setDistance((int)distance);
+    Ride savedRide = _rideRepository.save(newRide);
 
-    return _rideRepository.save(newRide);
+    for(int i = 0; i < waypoints.size(); i++){
+      var wpRequest = waypoints.get(i) ;
+      Waypoint wp = new Waypoint();
+      wp.setRideId(savedRide.getId());
+      wp.setLatitude(wpRequest.latitude);
+      wp.setLongitude(wpRequest.longitude);
+      wp.setNumber(i + 1);
+      newWaypoints.add(wp);
+    }
+
+    _waypointRepository.saveAll(newWaypoints);
+
+    savedRide.setWaypoints(newWaypoints);
+
+    return savedRide;
   }
 
   public Optional<Ride> getRide(int rideId){

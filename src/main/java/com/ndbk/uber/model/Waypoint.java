@@ -1,6 +1,5 @@
 package com.ndbk.uber.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity(name = "waypoint")
@@ -18,10 +17,8 @@ public class Waypoint {
   @Column(nullable = false)
   private double longitude;
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "ride_id", nullable = false) // Specify the foreign key column
-  @JsonIgnore
-  private Ride ride;
+  @Column(name="ride_id", nullable = false)
+  private int rideId;
 
   public void setId(Integer id) {
     this.id = id;
@@ -55,11 +52,11 @@ public class Waypoint {
     this.longitude = longitude;
   }
 
-    public Ride getRide() {
-        return ride;
-    }
+  public int getRideId() {
+    return rideId;
+  }
 
-    public void setRide(Ride ride) {
-        this.ride = ride;
-    }
+  public void setRideId(int rideId) {
+    this.rideId = rideId;
+  }
 }

@@ -16,7 +16,7 @@ public interface RideRepository extends CrudRepository<Ride, Integer> {
     @Query("SELECT new com.ndbk.uber.dto.RideStatistic(d.city, COUNT(r), SUM(r.price), AVG(w.latitude), AVG(w.longitude))" +
             "FROM com.ndbk.uber.model.Ride r " +
             "JOIN com.ndbk.uber.model.Driver d ON r.driver.id = d.id " +
-            "JOIN com.ndbk.uber.model.Waypoint w ON r.id = w.ride.id " +
+            "JOIN com.ndbk.uber.model.Waypoint w ON r.id = w.rideId " +
             "WHERE SUBSTR(d.city, -13) = 'United States' " +
             "GROUP BY d.city")
     List<RideStatistic> getRideStatistic();

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity(name = "ride")
 public class Ride {
@@ -84,12 +85,11 @@ public class Ride {
     this.price = price;
   }
 
-  public void addWaypoint(Waypoint waypoint) {
-    waypoint.setRide(this);
-    this.waypoints.add(waypoint);
-  }
-
   public Set<Waypoint> getWaypoints() {
     return waypoints;
+  }
+
+  public void setWaypoints(List<Waypoint> waypoints) {
+    this.waypoints = new HashSet<>(waypoints);
   }
 }
