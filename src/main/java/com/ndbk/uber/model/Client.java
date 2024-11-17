@@ -1,5 +1,6 @@
 package com.ndbk.uber.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -20,6 +21,7 @@ public class Client {
   private String gender;
 
   @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @JsonManagedReference
   private List<Ride> rides;
 
   public void setId(Integer id) {

@@ -1,5 +1,6 @@
 package com.ndbk.uber.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -26,7 +27,7 @@ public class Ride {
 
   @ManyToOne
   @JoinColumn(name = "client_id", nullable = false) // Foreign key in Ride table
-  @JsonIgnore
+  @JsonBackReference
   private Client client;
 
   @ManyToOne
