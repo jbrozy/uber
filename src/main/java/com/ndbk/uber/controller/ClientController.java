@@ -24,8 +24,9 @@ public class ClientController {
     Optional<Client> client = _clientService.getClient(clientId);
     if(client.isPresent()){
       var c = client.get();
-      var rides = c.getRides();
+      c.getRides();
     }
+
     return ResponseEntity.of(client);
   }
 

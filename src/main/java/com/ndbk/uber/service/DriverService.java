@@ -35,7 +35,6 @@ public class DriverService {
     driver.setCity(createDriverRequest.city);
     driver.setLicensePlate(createDriverRequest.licensePlate);
 
-
     return _driverRepository.save(driver);
   }
 
